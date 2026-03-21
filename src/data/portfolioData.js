@@ -11,9 +11,9 @@ export const PROFILE_IMAGE = "https://customer-assets.emergentagent.com/job_dipe
 // Personal Information
 export const PERSONAL_INFO = {
   name: "Dipen Thapa",
-  title: "AI/ML Student",
+  title: "BIT Student",
   tagline: "Architecting Intelligence",
-  subtitle: "Building practical AI solutions with clean code & steady progress",
+  subtitle: "Building practical AI solutions with clean code and steady progress",
   location: "Bhaktapur, Nepal",
   email: "tretime865@gmail.com",
   github: "https://github.com/dipenthapa7",
@@ -23,11 +23,11 @@ export const PERSONAL_INFO = {
 
 // About Section
 export const ABOUT_DATA = {
-  description: `I'm a BIT student from Bhaktapur, Nepal with a growing interest in Python, AI/ML, and practical project-based learning. I enjoy building simple, useful projects while improving my technical skills and exploring new technologies step by step. Currently focused on strengthening my programming foundation and growing as a future tech professional.`,
+  description: `I am a BIT student at Model Institute of Technology (MIT), Kathmandu, Nepal, affiliated with IAU, USA, with a focus on AI, web development, and data science. I enjoy building modern applications and continuously improving my skills through practical projects.`,
   highlights: [
-    "BIT student exploring Python and AI/ML",
-    "Focused on practical project-based learning",
-    "Building skills through consistent daily practice",
+    "BIT student at Model Institute of Technology (MIT), Kathmandu",
+    "Focused on AI, web development, and data science",
+    "Building skills through practical projects and continuous learning",
     "Open to internships and collaborative projects",
   ],
   stats: [
@@ -84,7 +84,6 @@ export const SKILLS_DATA = {
 };
 
 // Projects Section
-// To add a new project, copy the template below and fill in your details
 export const PROJECTS_DATA = [
   {
     id: 1,
@@ -94,7 +93,7 @@ export const PROJECTS_DATA = [
     techStack: ["Python", "TensorFlow", "Keras", "OpenCV"],
     category: "AI/ML",
     githubUrl: "https://github.com/dipenthapa7",
-    liveUrl: "", // Leave empty if no live demo
+    liveUrl: "",
     featured: true,
   },
   {
@@ -155,7 +154,6 @@ export const PROJECTS_DATA = [
 ];
 
 // Certificates Section
-// Add your certificates here - each certificate should have these fields
 export const CERTIFICATES_DATA = [
   {
     id: 1,
@@ -163,7 +161,7 @@ export const CERTIFICATES_DATA = [
     issuer: "Coursera - Stanford University",
     date: "2024",
     credentialUrl: "https://coursera.org/verify/",
-    image: "", // Optional: Add certificate image URL
+    image: "",
   },
   {
     id: 2,
