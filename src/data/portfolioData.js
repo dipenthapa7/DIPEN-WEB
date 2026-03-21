@@ -12,7 +12,7 @@ export const PROFILE_IMAGE = "https://customer-assets.emergentagent.com/job_dipe
 export const PERSONAL_INFO = {
   name: "Dipen Thapa",
   title: "BIT Student",
-  tagline: "Architecting Intelligence",
+  tagline: "AI/ML & Aspiring Data Scientist",
   subtitle: "Building practical AI solutions with clean code and steady progress",
   location: "Bhaktapur, Nepal",
   email: "tretime865@gmail.com",
