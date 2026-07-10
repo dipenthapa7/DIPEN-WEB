@@ -31,7 +31,7 @@ export const ABOUT_DATA = {
     "Open to internships and collaborative projects",
   ],
   stats: [
-    { label: "Projects", value: "2" },
+    { label: "Projects", value: "1" },
     { label: "Technologies", value: "8+" },
     { label: "Certificates", value: "5+" },
   ],
