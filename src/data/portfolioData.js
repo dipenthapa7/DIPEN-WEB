@@ -33,7 +33,7 @@ export const ABOUT_DATA = {
   stats: [
     { label: "Projects", value: "1" },
     { label: "Technologies", value: "8+" },
-    { label: "Certificates", value: "5+" },
+    { label: "Certificates", value: "2" },
   ],
 };
 
@@ -111,42 +111,20 @@ export const PROJECTS_DATA = [
 export const CERTIFICATES_DATA = [
   {
     id: 1,
-    name: "Machine Learning Specialization",
-    issuer: "Coursera - Stanford University",
-    date: "2024",
-    credentialUrl: "https://coursera.org/verify/",
+    name: "Python (Basic)",
+    issuer: "HackerRank",
+    date: "29 June 2026",
+    credentialUrl:
+      "https://www.hackerrank.com/certificates/c1f9e6ac26fe",
     image: "",
   },
   {
     id: 2,
-    name: "Python for Data Science",
-    issuer: "IBM - Cognitive Class",
-    date: "2024",
-    credentialUrl: "https://courses.cognitiveclass.ai/",
-    image: "",
-  },
-  {
-    id: 3,
-    name: "Deep Learning Fundamentals",
-    issuer: "NVIDIA Deep Learning Institute",
-    date: "2024",
-    credentialUrl: "https://learn.nvidia.com/",
-    image: "",
-  },
-  {
-    id: 4,
-    name: "Java Programming Masterclass",
-    issuer: "Udemy",
-    date: "2023",
-    credentialUrl: "https://www.udemy.com/",
-    image: "",
-  },
-  {
-    id: 5,
-    name: "Git & GitHub for Beginners",
-    issuer: "freeCodeCamp",
-    date: "2023",
-    credentialUrl: "https://www.freecodecamp.org/",
+    name: "Time Management",
+    issuer: "Skill Lab — Career Service Lab",
+    date: "6 June 2025",
+    credentialUrl:
+      "/certificates/time-management-skill-lab.pdf",
     image: "",
   },
 ];
