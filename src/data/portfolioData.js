@@ -95,14 +95,15 @@ export const PROJECTS_DATA = [
     techStack: [
       "Python",
       "Pandas",
-      "Matplotlib",
-      "Seaborn",
+      "Plotly",
+      "Streamlit",
       "Jupyter",
     ],
     category: "Data Science",
     githubUrl:
       "https://github.com/dipenthapa7/Nepal-Air-Quality-Analysis",
-    liveUrl: "",
+    liveUrl:
+      "https://nepal-air-quality-dipenthapa7.streamlit.app",
     featured: true,
   },
 ];
