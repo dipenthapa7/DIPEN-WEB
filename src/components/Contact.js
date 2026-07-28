@@ -1,311 +1,263 @@
-import { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
-import { useInView } from 'framer-motion';
-import emailjs from '@emailjs/browser';
-import { Send, Mail, MapPin, Github, Linkedin, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
-import { PERSONAL_INFO, EMAILJS_CONFIG } from '../data/portfolioData';
+import { useRef, useState } from "react";
+import emailjs from "@emailjs/browser";
+import { motion } from "framer-motion";
+import {
+  AlertCircle,
+  ArrowUpRight,
+  CheckCircle2,
+  Github,
+  Linkedin,
+  Loader2,
+  Mail,
+  MapPin,
+  Send,
+} from "lucide-react";
+import { EMAILJS_CONFIG, PERSONAL_INFO } from "../data/portfolioData";
+
+const initialForm = {
+  user_name: "",
+  user_email: "",
+  message: "",
+};
 
 const Contact = () => {
-  const ref = useRef(null);
   const formRef = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  
-  const [formData, setFormData] = useState({
-    user_name: '',
-    user_email: '',
-    message: ''
-  });
-  const [status, setStatus] = useState({ type: '', message: '' });
+  const [formData, setFormData] = useState(initialForm);
+  const [status, setStatus] = useState({ type: "", message: "" });
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+  const handleChange = ({ target }) => {
+    setFormData((current) => ({
+      ...current,
+      [target.name]: target.value,
+    }));
   };
 
-  const validateEmail = (email) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
-  };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    // Validation
-    if (!formData.user_name.trim()) {
-      setStatus({ type: 'error', message: 'Please enter your name' });
-      return;
-    }
-    if (!validateEmail(formData.user_email)) {
-      setStatus({ type: 'error', message: 'Please enter a valid email address' });
-      return;
-    }
     if (formData.message.trim().length < 10) {
-      setStatus({ type: 'error', message: 'Message must be at least 10 characters' });
+      setStatus({
+        type: "error",
+        message: "Please write at least 10 characters so I have enough context.",
+      });
       return;
     }
 
     setIsLoading(true);
-    setStatus({ type: '', message: '' });
+    setStatus({ type: "", message: "" });
 
     try {
-      // Check if EmailJS is configured
-      if (EMAILJS_CONFIG.serviceId === 'YOUR_SERVICE_ID') {
-        // Demo mode - simulate success
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        setStatus({ 
-          type: 'success', 
-          message: 'Message sent successfully! (Demo mode - configure EmailJS for real emails)' 
-        });
-        setFormData({ user_name: '', user_email: '', message: '' });
-      } else {
-        // Real EmailJS integration
-        await emailjs.sendForm(
-          EMAILJS_CONFIG.serviceId,
-          EMAILJS_CONFIG.templateId,
-          formRef.current,
-          EMAILJS_CONFIG.publicKey
-        );
-        setStatus({ type: 'success', message: 'Message sent successfully! I\'ll get back to you soon.' });
-        setFormData({ user_name: '', user_email: '', message: '' });
-      }
+      await emailjs.sendForm(
+        EMAILJS_CONFIG.serviceId,
+        EMAILJS_CONFIG.templateId,
+        formRef.current,
+        EMAILJS_CONFIG.publicKey
+      );
+      setStatus({
+        type: "success",
+        message: "Thanks—your message was sent. I’ll reply as soon as I can.",
+      });
+      setFormData(initialForm);
     } catch (error) {
-      setStatus({ type: 'error', message: 'Failed to send message. Please try again or email me directly.' });
+      setStatus({
+        type: "error",
+        message: `The form could not send right now. Email me directly at ${PERSONAL_INFO.email}.`,
+      });
     } finally {
       setIsLoading(false);
     }
   };
 
-  const contactInfo = [
-    { icon: Mail, label: 'Email', value: PERSONAL_INFO.email, href: `mailto:${PERSONAL_INFO.email}` },
-    { icon: MapPin, label: 'Location', value: PERSONAL_INFO.location, href: null },
-  ];
-
-  const socialLinks = [
-    { icon: Github, label: 'GitHub', href: PERSONAL_INFO.github },
-    { icon: Linkedin, label: 'LinkedIn', href: PERSONAL_INFO.linkedin },
-    { icon: Mail, label: 'Email', href: `mailto:${PERSONAL_INFO.email}` },
-  ];
-
   return (
     <section
       id="contact"
-      ref={ref}
-      className="relative py-24 md:py-32 overflow-hidden"
+      className="bg-[#111A31] py-[72px] md:py-24 lg:py-[104px]"
       data-testid="contact-section"
     >
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-void via-surface/50 to-void" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_100%,rgba(6,182,212,0.1)_0%,transparent_50%)]" />
-
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
+      <div className="section-shell">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.15 }}
+          className="surface-card grid overflow-hidden lg:grid-cols-[0.78fr_1.22fr]"
         >
-          <span className="text-cyan-400 font-mono text-sm uppercase tracking-widest">
-            Get In Touch
-          </span>
-          <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-heading font-bold text-slate-100">
-            Let's <span className="text-cyan-400">Connect</span>
-          </h2>
-          <p className="mt-4 text-slate-400 max-w-2xl mx-auto">
-            Have a project in mind or want to collaborate? Feel free to reach out.
-            I'm always open to discussing new opportunities and ideas.
-          </p>
-        </motion.div>
+          <div className="border-b border-[#21304D] p-7 sm:p-10 lg:border-b-0 lg:border-r lg:p-12">
+            <p className="section-kicker">Contact</p>
+            <h2 className="mt-4 text-3xl font-bold tracking-[-0.03em] text-slate-50 md:text-[2.5rem] md:leading-tight">
+              Let&apos;s build something useful.
+            </h2>
+            <p className="mt-5 text-sm leading-7 text-[#A8B3C7]">
+              I&apos;m open to internships, junior opportunities, and thoughtful
+              collaborations. Tell me what you&apos;re working on and where I
+              could help.
+            </p>
 
-        <div className="grid lg:grid-cols-5 gap-8 lg:gap-12">
-          {/* Contact Form */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="lg:col-span-3"
-          >
-            <form
-              ref={formRef}
-              onSubmit={handleSubmit}
-              className="p-6 md:p-8 rounded-2xl bg-surface/50 backdrop-blur-sm border border-white/5"
-              data-testid="contact-form"
-            >
-              <div className="grid sm:grid-cols-2 gap-6 mb-6">
-                {/* Name Input */}
-                <div>
-                  <label htmlFor="user_name" className="block text-sm font-medium text-slate-300 mb-2">
-                    Your Name *
-                  </label>
-                  <input
-                    type="text"
-                    id="user_name"
-                    name="user_name"
-                    value={formData.user_name}
-                    onChange={handleChange}
-                    placeholder="John Doe"
-                    disabled={isLoading}
-                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all duration-300 disabled:opacity-50"
-                    data-testid="contact-name-input"
-                  />
-                </div>
-
-                {/* Email Input */}
-                <div>
-                  <label htmlFor="user_email" className="block text-sm font-medium text-slate-300 mb-2">
-                    Your Email *
-                  </label>
-                  <input
-                    type="email"
-                    id="user_email"
-                    name="user_email"
-                    value={formData.user_email}
-                    onChange={handleChange}
-                    placeholder="john@example.com"
-                    disabled={isLoading}
-                    className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all duration-300 disabled:opacity-50"
-                    data-testid="contact-email-input"
-                  />
-                </div>
-              </div>
-
-              {/* Message Input */}
-              <div className="mb-6">
-                <label htmlFor="message" className="block text-sm font-medium text-slate-300 mb-2">
-                  Your Message *
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  rows="5"
-                  placeholder="Tell me about your project or inquiry..."
-                  disabled={isLoading}
-                  className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all duration-300 resize-none disabled:opacity-50"
-                  data-testid="contact-message-input"
-                />
-                <p className="mt-2 text-xs text-slate-500">
-                  {formData.message.length}/500 characters
-                </p>
-              </div>
-
-              {/* Status Message */}
-              {status.message && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className={`flex items-center gap-2 p-4 rounded-xl mb-6 ${
-                    status.type === 'success'
-                      ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400'
-                      : 'bg-red-500/10 border border-red-500/20 text-red-400'
-                  }`}
-                  data-testid="contact-status-message"
-                >
-                  {status.type === 'success' ? (
-                    <CheckCircle size={20} />
-                  ) : (
-                    <AlertCircle size={20} />
-                  )}
-                  <span className="text-sm">{status.message}</span>
-                </motion.div>
-              )}
-
-              {/* Submit Button */}
-              <motion.button
-                type="submit"
-                disabled={isLoading}
-                whileHover={{ scale: isLoading ? 1 : 1.02 }}
-                whileTap={{ scale: isLoading ? 1 : 0.98 }}
-                className="w-full py-4 px-6 bg-gradient-to-r from-cyan-500 to-cyan-600 text-void font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-cyan-500/30"
-                data-testid="contact-submit-btn"
+            <div className="mt-9 space-y-4">
+              <a
+                href={`mailto:${PERSONAL_INFO.email}`}
+                className="flex min-h-11 items-center gap-3 text-sm text-[#C8D2E3] hover:text-cyan-400"
               >
-                {isLoading ? (
-                  <>
-                    <Loader2 size={20} className="animate-spin" />
-                    Sending...
-                  </>
-                ) : (
-                  <>
-                    <Send size={20} />
-                    Send Message
-                  </>
-                )}
-              </motion.button>
-            </form>
-          </motion.div>
-
-          {/* Contact Info Sidebar */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="lg:col-span-2 space-y-6"
-          >
-            {/* Contact Cards */}
-            {contactInfo.map((info, index) => (
-              <motion.div
-                key={info.label}
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.5 + index * 0.1 }}
-                className="p-5 rounded-xl bg-surface/50 backdrop-blur-sm border border-white/5 hover:border-cyan-500/30 transition-all duration-300"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="p-3 rounded-xl bg-cyan-500/10 border border-cyan-500/20">
-                    <info.icon className="w-5 h-5 text-cyan-400" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-500 uppercase tracking-wider">{info.label}</p>
-                    {info.href ? (
-                      <a
-                        href={info.href}
-                        className="text-slate-200 hover:text-cyan-400 transition-colors font-medium"
-                        data-testid={`contact-info-${info.label.toLowerCase()}`}
-                      >
-                        {info.value}
-                      </a>
-                    ) : (
-                      <p className="text-slate-200 font-medium">{info.value}</p>
-                    )}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-
-            {/* Social Links */}
-            <div className="p-6 rounded-xl bg-gradient-to-br from-cyan-500/10 to-violet-500/10 border border-cyan-500/20">
-              <h3 className="text-lg font-heading font-semibold text-slate-100 mb-4">
-                Connect With Me
-              </h3>
-              <div className="flex gap-3">
-                {socialLinks.map((link) => (
-                  <motion.a
-                    key={link.label}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.1, y: -3 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="p-3 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-cyan-400 hover:border-cyan-500/50 transition-all duration-300"
-                    aria-label={link.label}
-                    data-testid={`contact-social-${link.label.toLowerCase()}`}
-                  >
-                    <link.icon size={22} />
-                  </motion.a>
-                ))}
-              </div>
-            </div>
-
-            {/* Note */}
-            <div className="p-4 rounded-xl bg-white/5 border border-white/5">
-              <p className="text-sm text-slate-500">
-                <span className="text-cyan-400">Tip:</span> For faster responses, mention the subject of your inquiry in the first line.
+                <Mail size={18} className="text-cyan-400" />
+                <span className="break-all">{PERSONAL_INFO.email}</span>
+              </a>
+              <p className="flex min-h-11 items-center gap-3 text-sm text-[#C8D2E3]">
+                <MapPin size={18} className="text-cyan-400" />
+                {PERSONAL_INFO.location}
               </p>
             </div>
-          </motion.div>
-        </div>
+
+            <div className="mt-8 flex gap-3">
+              <a
+                href={PERSONAL_INFO.github}
+                target="_blank"
+                rel="noreferrer"
+                className="grid h-11 w-11 place-items-center rounded-lg border border-[#2B3B59] text-[#A8B3C7] hover:border-cyan-400 hover:text-cyan-400"
+                aria-label="GitHub"
+              >
+                <Github size={19} />
+              </a>
+              <a
+                href={PERSONAL_INFO.linkedin}
+                target="_blank"
+                rel="noreferrer"
+                className="grid h-11 w-11 place-items-center rounded-lg border border-[#2B3B59] text-[#A8B3C7] hover:border-cyan-400 hover:text-cyan-400"
+                aria-label="LinkedIn"
+              >
+                <Linkedin size={19} />
+              </a>
+            </div>
+          </div>
+
+          <form
+            ref={formRef}
+            onSubmit={handleSubmit}
+            className="p-7 sm:p-10 lg:p-12"
+            data-testid="contact-form"
+          >
+            <div className="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label
+                  htmlFor="user_name"
+                  className="mb-2 block text-sm font-semibold text-slate-200"
+                >
+                  Name
+                </label>
+                <input
+                  id="user_name"
+                  name="user_name"
+                  type="text"
+                  value={formData.user_name}
+                  onChange={handleChange}
+                  placeholder="Your name"
+                  autoComplete="name"
+                  maxLength="80"
+                  required
+                  disabled={isLoading}
+                  className="min-h-12 w-full rounded-lg border border-[#2B3B59] bg-[#111A31] px-4 text-sm text-slate-50 placeholder:text-[#6F7D94] focus:border-cyan-400 focus:outline-none disabled:opacity-60"
+                  data-testid="contact-name-input"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="user_email"
+                  className="mb-2 block text-sm font-semibold text-slate-200"
+                >
+                  Email
+                </label>
+                <input
+                  id="user_email"
+                  name="user_email"
+                  type="email"
+                  value={formData.user_email}
+                  onChange={handleChange}
+                  placeholder="you@example.com"
+                  autoComplete="email"
+                  maxLength="120"
+                  required
+                  disabled={isLoading}
+                  className="min-h-12 w-full rounded-lg border border-[#2B3B59] bg-[#111A31] px-4 text-sm text-slate-50 placeholder:text-[#6F7D94] focus:border-cyan-400 focus:outline-none disabled:opacity-60"
+                  data-testid="contact-email-input"
+                />
+              </div>
+            </div>
+
+            <div className="mt-5">
+              <div className="mb-2 flex items-center justify-between gap-4">
+                <label
+                  htmlFor="message"
+                  className="text-sm font-semibold text-slate-200"
+                >
+                  Message
+                </label>
+                <span className="text-xs text-[#8390A7]">
+                  {formData.message.length}/500
+                </span>
+              </div>
+              <textarea
+                id="message"
+                name="message"
+                rows="6"
+                value={formData.message}
+                onChange={handleChange}
+                placeholder="Tell me about the opportunity or project..."
+                maxLength="500"
+                required
+                disabled={isLoading}
+                className="w-full resize-none rounded-lg border border-[#2B3B59] bg-[#111A31] px-4 py-3 text-sm leading-6 text-slate-50 placeholder:text-[#6F7D94] focus:border-cyan-400 focus:outline-none disabled:opacity-60"
+                data-testid="contact-message-input"
+              />
+            </div>
+
+            <div aria-live="polite" aria-atomic="true">
+              {status.message && (
+                <div
+                  className={`mt-5 flex items-start gap-3 rounded-lg border p-4 text-sm leading-5 ${
+                    status.type === "success"
+                      ? "border-emerald-400/25 bg-emerald-400/[0.07] text-emerald-200"
+                      : "border-red-400/25 bg-red-400/[0.07] text-red-200"
+                  }`}
+                  role={status.type === "error" ? "alert" : "status"}
+                  data-testid="contact-status-message"
+                >
+                  {status.type === "success" ? (
+                    <CheckCircle2 size={18} className="mt-0.5 shrink-0" />
+                  ) : (
+                    <AlertCircle size={18} className="mt-0.5 shrink-0" />
+                  )}
+                  {status.message}
+                </div>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="mt-6 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-cyan-400 px-6 text-sm font-bold text-[#050816] hover:bg-cyan-300 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+              data-testid="contact-submit-btn"
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 size={18} className="animate-spin" />
+                  Sending
+                </>
+              ) : (
+                <>
+                  Send message
+                  <Send size={17} />
+                </>
+              )}
+            </button>
+
+            <a
+              href={`mailto:${PERSONAL_INFO.email}`}
+              className="mt-5 inline-flex items-center gap-2 text-xs font-semibold text-[#8390A7] hover:text-cyan-400 sm:ml-5 sm:mt-0"
+            >
+              Or email directly
+              <ArrowUpRight size={14} />
+            </a>
+          </form>
+        </motion.div>
       </div>
     </section>
   );

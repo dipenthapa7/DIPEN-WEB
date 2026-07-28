@@ -8,20 +8,21 @@ module.exports = {
   theme: {
         extend: {
                 fontFamily: {
-                        heading: ['Outfit', 'sans-serif'],
-                        body: ['Plus Jakarta Sans', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
+                        heading: ['Inter', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'monospace'],
                 },
                 colors: {
-                        void: '#020617',
-                        surface: '#0f172a',
-                        'surface-highlight': '#1e293b',
+                        void: '#050816',
+                        surface: '#0B1224',
+                        'surface-highlight': '#111A31',
                         cyan: {
-                                DEFAULT: '#06b6d4',
+                                DEFAULT: '#19C2D8',
                                 50: '#ecfeff',
-                                400: '#22d3ee',
-                                500: '#06b6d4',
-                                600: '#0891b2',
+                                300: '#67E8F9',
+                                400: '#19C2D8',
+                                500: '#0EA5B7',
+                                600: '#0E8394',
                         },
                         violet: {
                                 DEFAULT: '#7c3aed',
@@ -31,8 +32,9 @@ module.exports = {
                         },
                         emerald: {
                                 DEFAULT: '#10b981',
-                                400: '#34d399',
-                                500: '#10b981',
+                                300: '#6EE7B7',
+                                400: '#42D39B',
+                                500: '#22B97D',
                         },
                         background: 'hsl(var(--background))',
                         foreground: 'hsl(var(--foreground))',

@@ -1,177 +1,98 @@
-/* Global App Styles */
 .App {
-    position: relative;
-    background-color: #020617;
-    color: #f8fafc;
-    min-height: 100vh;
+  position: relative;
+  min-height: 100vh;
+  background: #050816;
+  color: #f8fafc;
 }
 
-/* Hide Emergent badge */
 #emergent-badge {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
+  display: none !important;
 }
 
-/* Smooth scrolling for the entire page */
-html {
-    scroll-behavior: smooth;
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 100;
+  transform: translateY(-150%);
+  border-radius: 8px;
+  background: #19c2d8;
+  color: #050816;
+  padding: 10px 16px;
+  font-weight: 700;
 }
 
-/* Custom marquee animation for skills */
-@keyframes marquee {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-50%);
-    }
+.skip-link:focus {
+  transform: translateY(0);
 }
 
-.animate-marquee {
-    display: flex;
-    animation: marquee 25s linear infinite;
+.section-shell {
+  width: min(1200px, calc(100% - 48px));
+  margin-inline: auto;
 }
 
-.animate-marquee:hover {
-    animation-play-state: paused;
+.section-kicker {
+  color: #19c2d8;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 
-/* Line clamp utility */
-.line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+.surface-card {
+  border: 1px solid #21304d;
+  background: #0b1224;
+  border-radius: 18px;
 }
 
-.line-clamp-3 {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-/* Gradient text utility */
-.gradient-text {
-    background: linear-gradient(135deg, #06b6d4 0%, #7c3aed 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-/* Glassmorphism effect */
-.glass {
-    background: rgba(15, 23, 42, 0.5);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-/* Neon glow effects */
-.neon-cyan {
-    box-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
-}
-
-.neon-violet {
-    box-shadow: 0 0 20px rgba(124, 58, 237, 0.5);
-}
-
-/* Focus visible styling for accessibility */
 *:focus-visible {
-    outline: 2px solid #06b6d4;
-    outline-offset: 2px;
+  outline: 2px solid #19c2d8;
+  outline-offset: 3px;
 }
 
-/* Disable focus outline for mouse users */
-*:focus:not(:focus-visible) {
-    outline: none;
-}
-
-/* Custom selection color */
 ::selection {
-    background-color: rgba(6, 182, 212, 0.3);
-    color: #f8fafc;
+  background: rgba(25, 194, 216, 0.35);
+  color: #f8fafc;
 }
 
-/* Scrollbar styling */
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+  width: 9px;
 }
 
 ::-webkit-scrollbar-track {
-    background: #0f172a;
+  background: #050816;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #1e293b;
-    border-radius: 4px;
+  border: 2px solid #050816;
+  border-radius: 999px;
+  background: #334563;
 }
 
-::-webkit-scrollbar-thumb:hover {
-    background: #334155;
-}
-
-/* Firefox scrollbar */
-* {
-    scrollbar-width: thin;
-    scrollbar-color: #1e293b #0f172a;
-}
-
-/* Responsive typography */
-@media (max-width: 640px) {
-    html {
-        font-size: 14px;
-    }
-}
-
-/* Reduce motion for users who prefer it */
-@media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-    }
-    
-    .animate-marquee {
-        animation: none;
-    }
-}
-
-/* Image loading placeholder */
-img {
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-}
-
-/* Form input autofill styling */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 textarea:-webkit-autofill,
 textarea:-webkit-autofill:hover,
 textarea:-webkit-autofill:focus {
-    -webkit-text-fill-color: #f8fafc;
-    -webkit-box-shadow: 0 0 0px 1000px #0f172a inset;
-    box-shadow: 0 0 0px 1000px #0f172a inset;
-    transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: #f8fafc;
+  -webkit-box-shadow: 0 0 0 1000px #111a31 inset;
+  box-shadow: 0 0 0 1000px #111a31 inset;
 }
 
-/* Button hover effects */
-button,
-a {
-    transition: all 0.3s ease;
+@media (max-width: 640px) {
+  .section-shell {
+    width: min(100% - 48px, 1200px);
+  }
 }
 
-/* Ensure touch targets are large enough on mobile */
-@media (max-width: 768px) {
-    button,
-    a,
-    input,
-    textarea {
-        min-height: 44px;
-    }
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

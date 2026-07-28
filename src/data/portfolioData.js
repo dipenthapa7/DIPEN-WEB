@@ -1,146 +1,103 @@
-// =====================================================
-// PORTFOLIO DATA CONFIGURATION
-// =====================================================
-// Edit this file to update your portfolio content
-// All sections are easily customizable below
-// =====================================================
+export const PROFILE_IMAGE =
+  "https://customer-assets.emergentagent.com/job_dipen-aiml-portfolio/artifacts/8fpoe0kb_image.jpg";
 
-// Your profile image URL - replace with your own
-export const PROFILE_IMAGE = "https://customer-assets.emergentagent.com/job_dipen-aiml-portfolio/artifacts/8fpoe0kb_image.jpg";
-
-// Personal Information
 export const PERSONAL_INFO = {
   name: "Dipen Thapa",
-  title: "BIT Student",
-  tagline: "AI/ML & Aspiring Data Scientist",
-  subtitle: "Building practical AI solutions with clean code and steady progress",
+  shortName: "DT",
+  role: "Python & Data Science Developer",
   location: "Bhaktapur, Nepal",
   email: "tretime865@gmail.com",
   github: "https://github.com/dipenthapa7",
+  repositories: "https://github.com/dipenthapa7?tab=repositories",
   linkedin: "https://www.linkedin.com/in/dipen-thapa-34073432b/",
-  resumeUrl: "/resume.pdf", // Place your resume in public folder
 };
 
-// About Section
 export const ABOUT_DATA = {
-  description: `I am a BIT student at Model Institute of Technology (MIT), Kathmandu, Nepal, affiliated with IAU, USA, with a focus on AI, web development, and data science. I enjoy building modern applications and continuously improving my skills through practical projects.`,
+  description:
+    "I’m a Bachelor of Information Technology student at Model Institute of Technology in Kathmandu. I learn by turning real datasets into clear, usable products—from cleaning data in Python to publishing an interactive dashboard people can explore.",
+  approach:
+    "Right now I’m strengthening my foundations in data analysis, visualization, and frontend development. I’m looking for internship opportunities where I can contribute, learn from experienced teams, and keep shipping practical work.",
   highlights: [
-    "BIT student at Model Institute of Technology (MIT), Kathmandu",
-    "Focused on AI, web development, and data science",
-    "Building skills through practical projects and continuous learning",
-    "Open to internships and collaborative projects",
+    { label: "Based in", value: "Bhaktapur, Nepal" },
+    { label: "Current focus", value: "Python, data analysis & web" },
+    { label: "Open to", value: "Internships & collaboration" },
   ],
-  stats: [
-    { label: "Projects", value: "1" },
-    { label: "Technologies", value: "8+" },
-    { label: "Certificates", value: "2" },
-  ],
+  education: {
+    degree: "Bachelor of Information Technology",
+    institution: "Model Institute of Technology",
+    affiliation: "Affiliated with International American University, USA",
+    status: "Currently studying",
+  },
 };
 
-// Skills Section
-export const SKILLS_DATA = {
-  categories: [
-    {
-      title: "Programming Languages",
-      icon: "Code",
-      skills: [
-        { name: "Python", level: 75 },
-        { name: "Java", level: 65 },
-        { name: "JavaScript", level: 60 },
-        { name: "C++", level: 55 },
-      ],
-    },
-    {
-      title: "AI/ML & Data Science",
-      icon: "Brain",
-      skills: [
-        { name: "TensorFlow", level: 60 },
-        { name: "PyTorch", level: 55 },
-        { name: "Scikit-learn", level: 70 },
-        { name: "Pandas/NumPy", level: 75 },
-      ],
-    },
-    {
-      title: "Web Development",
-      icon: "Globe",
-      skills: [
-        { name: "HTML/CSS", level: 80 },
-        { name: "React", level: 55 },
-        { name: "Node.js", level: 50 },
-        { name: "Tailwind CSS", level: 65 },
-      ],
-    },
-    {
-      title: "Tools & Technologies",
-      icon: "Wrench",
-      skills: [
-        { name: "Git/GitHub", level: 70 },
-        { name: "VS Code", level: 85 },
-        { name: "Jupyter Notebook", level: 75 },
-        { name: "Linux/Bash", level: 60 },
-      ],
-    },
-  ],
-};
-
-// Projects Section
-export const PROJECTS_DATA = [
+export const CAPABILITIES_DATA = [
   {
-    id: 1,
-    title: "Nepal Air Quality Analysis",
+    title: "Data analysis",
     description:
-      "Analyzed Nepal's estimated mean annual PM2.5 exposure from 1990 to 2023 using World Bank data and Python.",
-    image:
-      "https://raw.githubusercontent.com/dipenthapa7/Nepal-Air-Quality-Analysis/main/reports/figures/nepal_pm25_trend.png",
-    techStack: [
-      "Python",
-      "Pandas",
-      "Plotly",
-      "Streamlit",
-      "Jupyter",
-    ],
-    category: "Data Science",
-    githubUrl:
-      "https://github.com/dipenthapa7/Nepal-Air-Quality-Analysis",
-    liveUrl:
-      "https://nepal-air-quality-dipenthapa7.streamlit.app",
-    featured: true,
+      "Cleaning, exploring, and interpreting real-world datasets with a reproducible Python workflow.",
+    tools: ["Python", "Pandas", "Jupyter"],
+    icon: "Database",
+  },
+  {
+    title: "Data visualization",
+    description:
+      "Turning findings into clear charts and interactive dashboards that make trends easier to understand.",
+    tools: ["Plotly", "Streamlit", "Matplotlib"],
+    icon: "BarChart",
+  },
+  {
+    title: "Frontend delivery",
+    description:
+      "Building responsive interfaces and publishing projects so the work is usable beyond a notebook.",
+    tools: ["React", "Tailwind CSS", "GitHub"],
+    icon: "Layout",
   },
 ];
 
-// Certificates Section
+export const PROJECTS_DATA = [
+  {
+    id: 1,
+    number: "01",
+    title: "Nepal Air Quality Analysis",
+    eyebrow: "Featured data project",
+    description:
+      "An end-to-end analysis of Nepal’s estimated mean annual PM2.5 exposure from 1990 to 2023, built with World Bank data and published as an interactive dashboard.",
+    outcome:
+      "The project turns more than three decades of data into a readable trend analysis with a public dashboard and documented source code.",
+    image:
+      "https://raw.githubusercontent.com/dipenthapa7/Nepal-Air-Quality-Analysis/main/reports/figures/nepal_pm25_trend.png",
+    techStack: ["Python", "Pandas", "Plotly", "Streamlit", "Jupyter"],
+    githubUrl:
+      "https://github.com/dipenthapa7/Nepal-Air-Quality-Analysis",
+    liveUrl: "https://nepal-air-quality-dipenthapa7.streamlit.app",
+  },
+];
+
 export const CERTIFICATES_DATA = [
   {
     id: 1,
     name: "Python (Basic)",
     issuer: "HackerRank",
     date: "29 June 2026",
-    credentialUrl:
-      "https://www.hackerrank.com/certificates/c1f9e6ac26fe",
-    image: "",
+    credentialUrl: "https://www.hackerrank.com/certificates/c1f9e6ac26fe",
   },
   {
     id: 2,
     name: "Time Management",
     issuer: "Skill Lab — Career Service Lab",
     date: "6 June 2025",
-    credentialUrl:
-      "/certificates/time-management-skill-lab.pdf",
-    image: "",
+    credentialUrl: "/certificates/time-management-skill-lab.pdf",
   },
 ];
 
-// Navigation Links
 export const NAV_LINKS = [
-  { name: "Home", href: "#home" },
+  { name: "Work", href: "#work" },
+  { name: "Capabilities", href: "#capabilities" },
   { name: "About", href: "#about" },
-  { name: "Skills", href: "#skills" },
-  { name: "Projects", href: "#projects" },
-  { name: "Certificates", href: "#certificates" },
+  { name: "Credentials", href: "#credentials" },
   { name: "Contact", href: "#contact" },
 ];
 
-// EmailJS Configuration
 export const EMAILJS_CONFIG = {
   serviceId: "dipen_thapa7",
   templateId: "template_uql1kx7",

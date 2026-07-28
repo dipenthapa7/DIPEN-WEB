@@ -1,187 +1,125 @@
-import { motion } from 'framer-motion';
-import { Download, Github, Linkedin, Mail, MapPin, ArrowRight } from 'lucide-react';
-import { PERSONAL_INFO, PROFILE_IMAGE } from '../data/portfolioData';
+import { motion } from "framer-motion";
+import {
+  ArrowDownRight,
+  ArrowUpRight,
+  Github,
+  Linkedin,
+  MapPin,
+} from "lucide-react";
+import { PERSONAL_INFO, PROFILE_IMAGE } from "../data/portfolioData";
 
 const Hero = () => {
-  const scrollToProjects = () => {
-    const element = document.getElementById('projects');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const scrollToContact = () => {
-    const element = document.getElementById('contact');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+  const scrollToWork = () => {
+    document.getElementById("work")?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
     <section
       id="home"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative overflow-hidden border-b border-[#17223A] pt-[72px] md:pt-[88px]"
       data-testid="hero-section"
     >
-      {/* Clean Background */}
-      <div className="absolute inset-0 bg-void" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(6,182,212,0.04)_0%,transparent_50%)]" />
+      <div className="pointer-events-none absolute left-[-10%] top-20 h-72 w-72 rounded-full bg-cyan-400/[0.06] blur-[90px]" />
+      <div className="section-shell grid gap-12 py-14 md:py-20 lg:grid-cols-[1fr_400px] lg:items-center lg:gap-20 lg:py-24">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.65 }}
+          className="max-w-[720px]"
+        >
+          <div className="mb-7 inline-flex items-center gap-2.5 rounded-full border border-emerald-400/25 bg-emerald-400/[0.07] px-3.5 py-2 text-xs font-semibold text-emerald-300">
+            <span className="h-2 w-2 rounded-full bg-emerald-400" />
+            Available for internships
+          </div>
 
-      <div className="relative z-10 w-full max-w-6xl mx-auto px-6 sm:px-8 lg:px-12 py-32 lg:py-40">
-        <div className="grid lg:grid-cols-5 gap-16 lg:gap-20 items-center">
-          
-          {/* Left Side - Profile Image (2 cols) */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="lg:col-span-2 flex justify-center lg:justify-start order-1"
-          >
-            <div className="relative">
-              {/* Clean Image Container */}
-              <motion.div
-                whileHover={{ scale: 1.01 }}
-                transition={{ duration: 0.4 }}
-                className="relative w-64 h-80 sm:w-72 sm:h-[360px] lg:w-80 lg:h-[400px] rounded-2xl overflow-hidden bg-surface border border-white/[0.08]"
-              >
-                <img
-                  src={PROFILE_IMAGE}
-                  alt={PERSONAL_INFO.name}
-                  className="w-full h-full object-cover"
-                  data-testid="hero-profile-image"
-                />
-              </motion.div>
+          <p className="mb-4 flex items-center gap-2 text-sm font-medium text-[#A8B3C7]">
+            <MapPin size={16} className="text-cyan-400" aria-hidden="true" />
+            {PERSONAL_INFO.location}
+          </p>
 
-              {/* Location Badge - Minimal */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1 }}
-                className="absolute -bottom-4 left-1/2 -translate-x-1/2 lg:left-auto lg:translate-x-0 lg:-right-4 px-4 py-2.5 bg-surface border border-white/[0.08] rounded-xl"
-              >
-                <div className="flex items-center gap-2 text-sm">
-                  <MapPin size={14} className="text-cyan-400" />
-                  <span className="text-slate-300">{PERSONAL_INFO.location}</span>
-                </div>
-              </motion.div>
-            </div>
-          </motion.div>
+          <h1 className="max-w-[720px] text-[2.65rem] font-extrabold leading-[1.08] tracking-[-0.045em] text-slate-50 sm:text-5xl md:text-[3.6rem]">
+            Python &amp; Data Science Developer building useful tools from
+            real-world data.
+          </h1>
 
-          {/* Right Side - Content (3 cols) */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.15 }}
-            className="lg:col-span-3 text-center lg:text-left order-2"
-          >
-            {/* Status Badge */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-emerald-500/[0.08] border border-emerald-500/20 mb-8"
+          <p className="mt-6 max-w-[650px] text-base leading-7 text-[#A8B3C7] md:text-lg md:leading-8">
+            I&apos;m Dipen, a BIT student who enjoys taking projects from raw
+            data to a clear analysis, interactive dashboard, and responsive
+            web experience.
+          </p>
+
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <button
+              type="button"
+              onClick={scrollToWork}
+              className="group inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-cyan-400 px-6 font-bold text-[#050816] hover:bg-cyan-300"
+              data-testid="hero-view-projects-btn"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-              <span className="text-sm font-medium text-emerald-400 tracking-wide">
-                Open to opportunities
-              </span>
-            </motion.div>
-
-            {/* Name & Title */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-              className="mb-6"
+              Explore selected work
+              <ArrowDownRight
+                size={18}
+                className="transition-transform group-hover:translate-x-0.5 group-hover:translate-y-0.5"
+              />
+            </button>
+            <a
+              href={PERSONAL_INFO.repositories}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-[#2B3B59] bg-[#0B1224] px-6 font-semibold text-slate-100 hover:border-cyan-400 hover:text-cyan-300"
             >
-              <p className="text-slate-500 text-base mb-2 tracking-wide">Hi, I'm</p>
-              <h1 className="text-4xl sm:text-5xl lg:text-[3.5rem] font-heading font-bold text-slate-50 tracking-tight leading-tight mb-3">
-                {PERSONAL_INFO.name}
-              </h1>
-              <p className="text-lg sm:text-xl text-cyan-400 font-medium">
-                {PERSONAL_INFO.title} · BIT Student
+              View GitHub
+              <ArrowUpRight size={18} />
+            </a>
+          </div>
+
+          <div className="mt-8 flex items-center gap-5 text-sm text-[#A8B3C7]">
+            <a
+              href={PERSONAL_INFO.github}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex min-h-11 items-center gap-2 hover:text-slate-50"
+              aria-label="Dipen Thapa on GitHub"
+            >
+              <Github size={18} />
+              GitHub
+            </a>
+            <a
+              href={PERSONAL_INFO.linkedin}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex min-h-11 items-center gap-2 hover:text-slate-50"
+              aria-label="Dipen Thapa on LinkedIn"
+            >
+              <Linkedin size={18} />
+              LinkedIn
+            </a>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.7, delay: 0.12 }}
+          className="relative mx-auto w-full max-w-[400px] lg:mx-0"
+        >
+          <div className="absolute -inset-3 rounded-[26px] border border-cyan-400/10" />
+          <div className="relative h-[360px] overflow-hidden rounded-[20px] border border-[#2B3B59] bg-[#0B1224] sm:h-[500px]">
+            <img
+              src={PROFILE_IMAGE}
+              alt="Dipen Thapa"
+              width="400"
+              height="500"
+              fetchPriority="high"
+              className="h-full w-full object-cover object-center"
+              data-testid="hero-profile-image"
+            />
+            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#050816]/80 to-transparent px-5 pb-5 pt-20">
+              <p className="text-sm font-semibold text-white">
+                {PERSONAL_INFO.role}
               </p>
-            </motion.div>
-
-            {/* Description */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-              className="text-slate-400 text-base sm:text-[17px] leading-relaxed max-w-md mx-auto lg:mx-0 mb-10"
-            >
-              A BIT student with a growing interest in Python, AI/ML, and practical 
-              project-based learning. I enjoy building simple, useful projects while 
-              exploring new technologies step by step.
-            </motion.p>
-
-            {/* CTA Buttons */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.7 }}
-              className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-10"
-            >
-              <motion.button
-                onClick={scrollToProjects}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="group px-6 py-3.5 bg-cyan-500 hover:bg-cyan-400 text-void font-semibold rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
-                data-testid="hero-view-projects-btn"
-              >
-                View Projects
-                <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
-              </motion.button>
-
-              <motion.a
-                href={PERSONAL_INFO.resumeUrl}
-                download
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="px-6 py-3.5 bg-transparent border border-white/[0.12] text-slate-200 font-semibold rounded-xl hover:bg-white/[0.04] hover:border-white/20 transition-all duration-300 flex items-center justify-center gap-2"
-                data-testid="hero-download-cv-btn"
-              >
-                <Download size={16} />
-                Download CV
-              </motion.a>
-            </motion.div>
-
-            {/* Social Links */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8 }}
-              className="flex gap-2 justify-center lg:justify-start"
-            >
-              {[
-                { icon: Github, href: PERSONAL_INFO.github, label: 'GitHub', testId: 'hero-github-link' },
-                { icon: Linkedin, href: PERSONAL_INFO.linkedin, label: 'LinkedIn', testId: 'hero-linkedin-link' },
-              ].map((social) => (
-                <motion.a
-                  key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ y: -2 }}
-                  className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-slate-500 hover:text-cyan-400 hover:border-white/[0.12] transition-all duration-300"
-                  data-testid={social.testId}
-                  aria-label={social.label}
-                >
-                  <social.icon size={18} />
-                </motion.a>
-              ))}
-              <motion.button
-                onClick={scrollToContact}
-                whileHover={{ y: -2 }}
-                className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-slate-500 hover:text-cyan-400 hover:border-white/[0.12] transition-all duration-300"
-                data-testid="hero-email-link"
-                aria-label="Email"
-              >
-                <Mail size={18} />
-              </motion.button>
-            </motion.div>
-          </motion.div>
-        </div>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

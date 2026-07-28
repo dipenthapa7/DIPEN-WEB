@@ -1,141 +1,154 @@
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
-import { NAV_LINKS, PERSONAL_INFO } from '../data/portfolioData';
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowUpRight, Menu, X } from "lucide-react";
+import { NAV_LINKS, PERSONAL_INFO } from "../data/portfolioData";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState('home');
+  const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-      
-      // Update active section based on scroll position
-      const sections = NAV_LINKS.map(link => link.href.substring(1));
-      for (const section of sections.reverse()) {
+      setIsScrolled(window.scrollY > 24);
+      const sections = NAV_LINKS.map((link) => link.href.slice(1));
+
+      for (const section of [...sections].reverse()) {
         const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= 100) {
-            setActiveSection(section);
-            break;
-          }
+        if (element && element.getBoundingClientRect().top <= 140) {
+          setActiveSection(section);
+          return;
         }
       }
+      setActiveSection("");
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleNavClick = (e, href) => {
-    e.preventDefault();
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+  const goTo = (event, href) => {
+    event.preventDefault();
+    const scrollToSection = () =>
+      document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+
+    if (isOpen) {
+      setIsOpen(false);
+      window.setTimeout(scrollToSection, 320);
+      return;
     }
-    setIsOpen(false);
+
+    scrollToSection();
   };
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
+    <motion.header
+      initial={{ y: -88 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.6 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-surface/80 backdrop-blur-xl border-b border-white/10 shadow-lg'
-          : 'bg-transparent'
+      transition={{ duration: 0.55, ease: "easeOut" }}
+      className={`fixed inset-x-0 top-0 z-50 border-b transition-colors duration-300 ${
+        isScrolled || isOpen
+          ? "border-[#21304D] bg-[#050816]/95 backdrop-blur-xl"
+          : "border-transparent bg-[#050816]/75 backdrop-blur-md"
       }`}
       data-testid="navbar"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
-          <motion.a
-            href="#home"
-            onClick={(e) => handleNavClick(e, '#home')}
-            className="flex items-center gap-2"
-            whileHover={{ scale: 1.05 }}
-            data-testid="navbar-logo"
-          >
-            <span className="text-xl md:text-2xl font-heading font-bold">
-              <span className="text-cyan-400">Dipen</span>
-              <span className="text-slate-100"> Thapa</span>
-            </span>
-          </motion.a>
+      <nav
+        className="section-shell flex h-[72px] items-center justify-between md:h-[88px]"
+        aria-label="Primary navigation"
+      >
+        <a
+          href="#home"
+          onClick={(event) => goTo(event, "#home")}
+          className="group flex items-center gap-3"
+          data-testid="navbar-logo"
+        >
+          <span className="grid h-10 w-10 place-items-center rounded-lg border border-[#2B3B59] bg-[#0B1224] text-sm font-extrabold tracking-tight text-cyan-400 transition-colors group-hover:border-cyan-400">
+            {PERSONAL_INFO.shortName}
+          </span>
+          <span className="hidden text-sm font-semibold tracking-wide text-slate-100 sm:block">
+            {PERSONAL_INFO.name}
+          </span>
+        </a>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1">
-            {NAV_LINKS.map((link) => (
-              <motion.a
+        <div className="hidden items-center gap-7 md:flex">
+          {NAV_LINKS.map((link) => {
+            const isActive = activeSection === link.href.slice(1);
+            return (
+              <a
                 key={link.name}
                 href={link.href}
-                onClick={(e) => handleNavClick(e, link.href)}
-                className={`px-4 py-2 text-sm font-medium tracking-wide uppercase transition-all duration-300 rounded-lg ${
-                  activeSection === link.href.substring(1)
-                    ? 'text-cyan-400 bg-cyan-400/10'
-                    : 'text-slate-300 hover:text-cyan-400 hover:bg-white/5'
+                onClick={(event) => goTo(event, link.href)}
+                className={`text-sm font-medium transition-colors ${
+                  isActive
+                    ? "text-cyan-400"
+                    : "text-[#A8B3C7] hover:text-slate-50"
                 }`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                aria-current={isActive ? "page" : undefined}
                 data-testid={`nav-link-${link.name.toLowerCase()}`}
               >
                 {link.name}
-              </motion.a>
-            ))}
-          </div>
-
-          {/* Mobile Menu Button */}
-          <motion.button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:text-cyan-400 transition-colors"
-            whileTap={{ scale: 0.9 }}
-            data-testid="mobile-menu-button"
-            aria-label="Toggle navigation menu"
+              </a>
+            );
+          })}
+          <a
+            href={`mailto:${PERSONAL_INFO.email}`}
+            className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-cyan-400 px-5 text-sm font-bold text-[#050816] hover:bg-cyan-300"
           >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </motion.button>
+            Let&apos;s talk
+            <ArrowUpRight size={16} aria-hidden="true" />
+          </a>
         </div>
-      </div>
 
-      {/* Mobile Navigation */}
+        <button
+          type="button"
+          onClick={() => setIsOpen((value) => !value)}
+          className="grid h-11 w-11 place-items-center rounded-lg border border-[#2B3B59] bg-[#0B1224] text-slate-100 md:hidden"
+          aria-expanded={isOpen}
+          aria-controls="mobile-navigation"
+          aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+          data-testid="mobile-menu-button"
+        >
+          {isOpen ? <X size={21} /> : <Menu size={21} />}
+        </button>
+      </nav>
+
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden bg-surface/95 backdrop-blur-xl border-b border-white/10"
+          <motion.nav
+            id="mobile-navigation"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="overflow-hidden border-t border-[#21304D] bg-[#050816] md:hidden"
+            aria-label="Mobile navigation"
             data-testid="mobile-menu"
           >
-            <div className="px-4 py-4 space-y-1">
-              {NAV_LINKS.map((link, index) => (
-                <motion.a
+            <div className="section-shell flex flex-col py-4">
+              {NAV_LINKS.map((link) => (
+                <a
                   key={link.name}
                   href={link.href}
-                  onClick={(e) => handleNavClick(e, link.href)}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  className={`block px-4 py-3 text-sm font-medium tracking-wide uppercase rounded-lg transition-all ${
-                    activeSection === link.href.substring(1)
-                      ? 'text-cyan-400 bg-cyan-400/10'
-                      : 'text-slate-300 hover:text-cyan-400 hover:bg-white/5'
-                  }`}
+                  onClick={(event) => goTo(event, link.href)}
+                  className="flex min-h-12 items-center border-b border-[#17223A] text-sm font-semibold text-[#A8B3C7] last:border-0 hover:text-cyan-400"
                   data-testid={`mobile-nav-link-${link.name.toLowerCase()}`}
                 >
                   {link.name}
-                </motion.a>
+                </a>
               ))}
+              <a
+                href={`mailto:${PERSONAL_INFO.email}`}
+                className="mt-4 inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-cyan-400 px-5 font-bold text-[#050816]"
+              >
+                Let&apos;s talk
+                <ArrowUpRight size={17} />
+              </a>
             </div>
-          </motion.div>
+          </motion.nav>
         )}
       </AnimatePresence>
-    </motion.nav>
+    </motion.header>
   );
 };
 

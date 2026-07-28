@@ -1,147 +1,85 @@
-import { motion } from 'framer-motion';
-import { useInView } from 'framer-motion';
-import { useRef } from 'react';
-import { MapPin, BookOpen, Target, Users } from 'lucide-react';
-import { ABOUT_DATA, PERSONAL_INFO } from '../data/portfolioData';
+import { motion } from "framer-motion";
+import { BookOpen, MapPin, Sparkles } from "lucide-react";
+import { ABOUT_DATA } from "../data/portfolioData";
 
-const About = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.15 }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
-  };
-
-  const infoCards = [
-    { icon: MapPin, label: 'Location', value: PERSONAL_INFO.location, color: 'cyan' },
-    { icon: BookOpen, label: 'Education', value: 'BIT Student', color: 'violet' },
-    { icon: Target, label: 'Focus', value: 'AI/ML & Data Science', color: 'emerald' },
-    { icon: Users, label: 'Status', value: 'Open to Collaborate', color: 'amber' },
-  ];
-
-  const colorMap = {
-    cyan: { bg: 'bg-cyan-500/[0.08]', text: 'text-cyan-400' },
-    violet: { bg: 'bg-violet-500/[0.08]', text: 'text-violet-400' },
-    emerald: { bg: 'bg-emerald-500/[0.08]', text: 'text-emerald-400' },
-    amber: { bg: 'bg-amber-500/[0.08]', text: 'text-amber-400' },
-  };
-
-  return (
-    <section
-      id="about"
-      ref={ref}
-      className="relative py-28 md:py-36 overflow-hidden"
-      data-testid="about-section"
-    >
-      {/* Clean Background */}
-      <div className="absolute inset-0 bg-void" />
-
+const About = () => (
+  <section
+    id="about"
+    className="bg-[#111A31] py-[72px] md:py-24 lg:py-[104px]"
+    data-testid="about-section"
+  >
+    <div className="section-shell grid gap-12 lg:grid-cols-[1fr_420px] lg:gap-20">
       <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
-        className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 lg:px-12"
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.25 }}
       >
-        {/* Section Header */}
-        <motion.div variants={itemVariants} className="text-center mb-16">
-          <span className="text-cyan-400 font-mono text-xs uppercase tracking-[0.2em]">
-            Get to know me
-          </span>
-          <h2 className="mt-4 text-3xl md:text-4xl font-heading font-bold text-slate-50">
-            About Me
-          </h2>
-        </motion.div>
-
-        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
-          {/* Main Content */}
-          <motion.div variants={itemVariants} className="lg:col-span-7">
-            {/* Bio Card */}
-            <div className="p-8 rounded-2xl bg-surface/40 border border-white/[0.06] mb-6">
-              <p className="text-slate-300 text-base leading-[1.8] mb-8">
-                {ABOUT_DATA.description}
-              </p>
-
-              <div className="space-y-3">
-                {ABOUT_DATA.highlights.map((highlight, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={isInView ? { opacity: 1, x: 0 } : {}}
-                    transition={{ delay: 0.4 + index * 0.1 }}
-                    className="flex items-center gap-3"
-                  >
-                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 flex-shrink-0" />
-                    <span className="text-slate-400 text-sm">{highlight}</span>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-
-            {/* Info Cards Grid */}
-            <div className="grid sm:grid-cols-2 gap-3">
-              {infoCards.map((card, index) => (
-                <motion.div
-                  key={card.label}
-                  variants={itemVariants}
-                  whileHover={{ y: -2, borderColor: 'rgba(255,255,255,0.12)' }}
-                  className="p-5 rounded-xl bg-surface/30 border border-white/[0.04] transition-all duration-300"
-                >
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className={`p-2 rounded-lg ${colorMap[card.color].bg}`}>
-                      <card.icon className={`w-4 h-4 ${colorMap[card.color].text}`} />
-                    </div>
-                    <span className="text-xs text-slate-500 uppercase tracking-wider">{card.label}</span>
-                  </div>
-                  <p className="text-slate-200 font-medium text-sm pl-11">{card.value}</p>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Stats Sidebar */}
-          <motion.div variants={itemVariants} className="lg:col-span-5 space-y-4">
-            {ABOUT_DATA.stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: 20 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ delay: 0.5 + index * 0.1 }}
-                whileHover={{ y: -2 }}
-                className="p-6 rounded-2xl bg-surface/40 border border-white/[0.06] transition-all duration-300"
-              >
-                <div className="text-4xl font-heading font-bold text-cyan-400 mb-1">
-                  {stat.value}
-                </div>
-                <div className="text-slate-500 text-sm font-medium">{stat.label}</div>
-              </motion.div>
-            ))}
-
-            {/* Quote Card */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ delay: 0.8 }}
-              className="p-6 rounded-2xl bg-gradient-to-br from-cyan-500/[0.06] to-violet-500/[0.04] border border-cyan-500/[0.1]"
-            >
-              <p className="text-slate-400 text-sm leading-relaxed italic">
-                "Building the future through code, one commit at a time."
-              </p>
-              <p className="mt-3 text-cyan-400 text-sm font-medium">— {PERSONAL_INFO.name}</p>
-            </motion.div>
-          </motion.div>
+        <p className="section-kicker">About</p>
+        <h2 className="mt-3 max-w-[650px] text-3xl font-bold tracking-[-0.03em] text-slate-50 md:text-[2.5rem] md:leading-[1.2]">
+          Curious about the full path from question to working product.
+        </h2>
+        <div className="mt-7 max-w-[700px] space-y-5 text-base leading-7 text-[#A8B3C7]">
+          <p>{ABOUT_DATA.description}</p>
+          <p>{ABOUT_DATA.approach}</p>
         </div>
+
+        <dl className="mt-9 grid gap-4 sm:grid-cols-3">
+          {ABOUT_DATA.highlights.map((item) => (
+            <div key={item.label} className="border-l border-[#36506F] pl-4">
+              <dt className="text-xs font-bold uppercase tracking-[0.12em] text-[#8390A7]">
+                {item.label}
+              </dt>
+              <dd className="mt-2 text-sm font-semibold leading-5 text-slate-100">
+                {item.value}
+              </dd>
+            </div>
+          ))}
+        </dl>
       </motion.div>
-    </section>
-  );
-};
+
+      <motion.aside
+        initial={{ opacity: 0, x: 24 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true, amount: 0.25 }}
+        className="surface-card self-start p-7 sm:p-8"
+        aria-labelledby="education-heading"
+      >
+        <div className="flex items-center justify-between">
+          <div className="grid h-12 w-12 place-items-center rounded-lg border border-emerald-400/20 bg-emerald-400/[0.07] text-emerald-300">
+            <BookOpen size={23} />
+          </div>
+          <span className="rounded-full border border-emerald-400/25 bg-emerald-400/[0.07] px-3 py-1.5 text-xs font-semibold text-emerald-300">
+            {ABOUT_DATA.education.status}
+          </span>
+        </div>
+        <p className="mt-7 text-xs font-bold uppercase tracking-[0.14em] text-cyan-400">
+          Education
+        </p>
+        <h3
+          id="education-heading"
+          className="mt-3 text-2xl font-bold leading-tight text-slate-50"
+        >
+          {ABOUT_DATA.education.degree}
+        </h3>
+        <p className="mt-4 font-semibold text-[#C8D2E3]">
+          {ABOUT_DATA.education.institution}
+        </p>
+        <p className="mt-2 text-sm leading-6 text-[#A8B3C7]">
+          {ABOUT_DATA.education.affiliation}
+        </p>
+        <div className="mt-7 space-y-3 border-t border-[#21304D] pt-6 text-sm text-[#A8B3C7]">
+          <p className="flex items-center gap-3">
+            <MapPin size={17} className="text-cyan-400" />
+            Kathmandu, Nepal
+          </p>
+          <p className="flex items-center gap-3">
+            <Sparkles size={17} className="text-cyan-400" />
+            Project-based learning
+          </p>
+        </div>
+      </motion.aside>
+    </div>
+  </section>
+);
 
 export default About;
