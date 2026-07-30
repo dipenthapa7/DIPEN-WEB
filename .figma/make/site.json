@@ -1,0 +1,17 @@
+{
+  "title": "Dipen Thapa — Portfolio",
+  "description": "Portfolio of Dipen Thapa, a Python, data science, machine learning, and web developer.",
+  "language": "en",
+  "robots": {
+    "index": true
+  },
+  "icons": {
+    "icon": "/favicon.svg"
+  },
+  "openGraph": {
+    "image": "/og.png"
+  },
+  "customScripts": {
+    "headEnd": "<meta name=\"theme-color\" content=\"#060609\"><link rel=\"canonical\" href=\"https://www.dipenthapa7.com.np/\"><meta property=\"og:type\" content=\"website\"><meta property=\"og:url\" content=\"https://www.dipenthapa7.com.np/\"><meta name=\"twitter:card\" content=\"summary_large_image\"><script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@type\":\"Person\",\"name\":\"Dipen Thapa\",\"url\":\"https://www.dipenthapa7.com.np/\",\"sameAs\":[\"https://github.com/dipenthapa7\",\"https://www.linkedin.com/in/dipen-thapa-34073432b\"],\"knowsAbout\":[\"Python\",\"Data Science\",\"Machine Learning\",\"React\",\"Data Visualization\"]}</script>"
+  }
+}
