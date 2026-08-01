@@ -1,4 +1,5 @@
 import CustomCursor from './components/CustomCursor'
+import CursorTrail from './components/CursorTrail'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import About from './components/About'
@@ -28,6 +29,7 @@ export default function App() {
       </a>
 
       {/* Custom cursor — hidden on touch devices via CSS */}
+      <CursorTrail />
       <CustomCursor />
 
       {/* Navigation */}

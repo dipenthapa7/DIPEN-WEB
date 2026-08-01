@@ -756,13 +756,6 @@ body {
     opacity: 0;
   }
 
-  body {
-    cursor: auto;
-  }
-
-  .cursor-dot,
-  .cursor-ring,
-  .cursor-label,
   .intro-loader {
     display: none !important;
   }
@@ -817,18 +810,6 @@ body {
   height: 54px;
   background: rgba(124, 58, 237, 0.08);
   border-color: rgba(124, 58, 237, 0.75);
-}
-
-.cursor-ring.is-hovering::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  bottom: 9px;
-  width: 18px;
-  height: 1px;
-  transform: translateX(-50%);
-  background: #a78bfa;
-  box-shadow: 0 0 6px rgba(167, 139, 250, 0.65);
 }
 
 .cursor-ring.is-project {

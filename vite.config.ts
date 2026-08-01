@@ -3,12 +3,43 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'node:path'
 
-import siteConfiguration from './.figma/make/site.json'
+import siteConfiguration from './.figma/make/site.json' with { type: 'json' }
+
+const JSON_LD_SHA256 = 'sha256-kvGGmeyW85iZBhrFiWPu6bUqU5lsabbB13sxkdTxdA0='
+const CONTENT_SECURITY_POLICY = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "frame-src 'none'",
+  "form-action 'self' mailto: https://formspree.io",
+  "img-src 'self' data:",
+  "font-src 'self' https://fonts.gstatic.com",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  `script-src 'self' '${JSON_LD_SHA256}'`,
+  "connect-src 'self' https://formspree.io",
+  "manifest-src 'self'",
+  "media-src 'self'",
+  "worker-src 'self' blob:",
+  'upgrade-insecure-requests',
+].join('; ')
+
+const BROWSER_SECURITY_HEADERS = {
+  'Content-Security-Policy': `${CONTENT_SECURITY_POLICY}; frame-ancestors 'none'`,
+  'Cross-Origin-Opener-Policy': 'same-origin',
+  'Cross-Origin-Resource-Policy': 'same-origin',
+  'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=(), usb=()',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'DENY',
+}
 
 // Vite config — https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   // .figma/make/deploy-preview passes `--mode development` for cached-preview builds.
   const emitSourcemaps = mode === 'development'
+  // Localhost is the safe default. Hosted preview environments can opt in to a
+  // different interface explicitly with HOST.
+  const serverHost = process.env.HOST || (process.env.FIGMA_PUBLIC_URL ? '0.0.0.0' : '127.0.0.1')
 
   return {
     base: process.env.FIGMA_PUBLIC_URL ? `${process.env.FIGMA_PUBLIC_URL}/` : '/',
@@ -20,27 +51,110 @@ export default defineConfig(({ mode }) => {
       react(),
       tailwindcss(),
       figmaSiteConfiguration(siteConfiguration),
+      productionSecurityPolicy(),
+      sitesStaticWorker(),
       figmaErrorOverlayReplay(),
       figmaReactRefreshBoundaryFallback(),
       figmaMakeKitPlugin({ storiesGlob: '/src/**/*.stories.{ts,tsx,js,jsx}' }),
     ],
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, './src'),
+        '@': path.resolve(import.meta.dirname, './src'),
       },
     },
     server: {
-      host: '0.0.0.0',
+      host: serverHost,
       port: parseInt(process.env.PORT || '8443'),
       strictPort: true,
+      headers: {
+        'Permissions-Policy': BROWSER_SECURITY_HEADERS['Permissions-Policy'],
+        'Referrer-Policy': BROWSER_SECURITY_HEADERS['Referrer-Policy'],
+        'X-Content-Type-Options': BROWSER_SECURITY_HEADERS['X-Content-Type-Options'],
+      },
       watch: { ignored: ['**/.figma/**'] },
     },
     preview: {
-      host: '0.0.0.0',
+      host: serverHost,
       port: parseInt(process.env.PORT || '8443'),
+      strictPort: true,
+      headers: BROWSER_SECURITY_HEADERS,
     },
   }
 })
+
+/**
+ * Adds a CSP fallback to the generated HTML for static hosts that do not let
+ * the site configure response headers (for example, GitHub Pages).
+ * Development intentionally omits this meta policy so Vite's HMR client works.
+ */
+function productionSecurityPolicy(): Plugin {
+  return {
+    name: 'production-security-policy',
+    apply: 'build',
+    transformIndexHtml: {
+      order: 'post',
+      handler() {
+        return [
+          {
+            tag: 'meta',
+            attrs: { 'http-equiv': 'Content-Security-Policy', content: CONTENT_SECURITY_POLICY },
+            injectTo: 'head-prepend',
+          },
+          {
+            tag: 'meta',
+            attrs: { name: 'referrer', content: 'strict-origin-when-cross-origin' },
+            injectTo: 'head-prepend',
+          },
+        ]
+      },
+    },
+  }
+}
+
+/**
+ * Provides the Cloudflare Worker entry point expected by OpenAI Sites while
+ * keeping this existing Vite app fully static. Navigation requests fall back
+ * to index.html so direct links continue to load the React application.
+ */
+function sitesStaticWorker(): Plugin {
+  const workerSource = `
+const SECURITY_HEADERS = ${JSON.stringify(BROWSER_SECURITY_HEADERS)};
+
+export default {
+  async fetch(request, env) {
+    let response = await env.ASSETS.fetch(request);
+    const acceptsHtml = request.headers.get('Accept')?.includes('text/html');
+
+    if (
+      response.status === 404 &&
+      (request.method === 'GET' || request.method === 'HEAD') &&
+      acceptsHtml
+    ) {
+      const fallbackUrl = new URL('/index.html', request.url);
+      response = await env.ASSETS.fetch(new Request(fallbackUrl, request));
+    }
+
+    const securedResponse = new Response(response.body, response);
+    for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
+      securedResponse.headers.set(name, value);
+    }
+    return securedResponse;
+  },
+};
+`.trimStart()
+
+  return {
+    name: 'sites-static-worker',
+    apply: 'build',
+    generateBundle() {
+      this.emitFile({
+        type: 'asset',
+        fileName: 'server/index.js',
+        source: workerSource,
+      })
+    },
+  }
+}
 
 type FigmaSiteConfiguration = {
   title?: string

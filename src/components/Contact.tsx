@@ -2,19 +2,52 @@ import { type FormEvent, useState } from 'react'
 import { useInView } from '../hooks/useInView'
 import WordReveal from './WordReveal'
 
+const FORMSPREE_ENDPOINT = 'https://formspree.io/f/meeybzpo'
+
+type SubmitStatus = 'idle' | 'sending' | 'sent' | 'error'
+
 export default function Contact() {
   const { ref, inView } = useInView(0.1)
   const [form, setForm] = useState({ name: '', email: '', message: '' })
-  const [sent, setSent] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<SubmitStatus>('idle')
+  const [submitError, setSubmitError] = useState('')
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    // Wire to your preferred form service (Formspree, Netlify Forms, etc.)
-    // For now, open email client as fallback
-    const subject = encodeURIComponent(`Portfolio contact from ${form.name}`)
-    const body = encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\n\nMessage:\n${form.message}`)
-    window.location.href = `mailto:tretime865@gmail.com?subject=${subject}&body=${body}`
-    setSent(true)
+    setSubmitStatus('sending')
+    setSubmitError('')
+
+    try {
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          message: form.message,
+          _subject: `Portfolio contact from ${form.name}`,
+        }),
+      })
+
+      if (!response.ok) {
+        setSubmitStatus('error')
+        setSubmitError(
+          response.status === 429
+            ? 'Too many messages were sent recently. Please wait a moment and try again.'
+            : 'Your message could not be sent. Please try again or email me directly.',
+        )
+        return
+      }
+
+      setForm({ name: '', email: '', message: '' })
+      setSubmitStatus('sent')
+    } catch {
+      setSubmitStatus('error')
+      setSubmitError('Your message could not be sent. Check your connection and try again.')
+    }
   }
 
   return (
@@ -153,7 +186,7 @@ export default function Contact() {
           <div
             className={`reveal ${inView ? 'visible' : ''} reveal-delay-2`}
           >
-            {sent ? (
+            {submitStatus === 'sent' ? (
               <div
                 className="flex flex-col items-center justify-center gap-4 p-12 rounded-3xl text-center"
                 style={{
@@ -171,14 +204,16 @@ export default function Contact() {
                   </svg>
                 </div>
                 <p className="font-display font-semibold" style={{ fontSize: 18, color: 'var(--text-1)' }}>
-                  Email draft opened
+                  Message sent
                 </p>
                 <p style={{ fontFamily: 'Inter, sans-serif', fontSize: 14, color: 'var(--text-2)' }}>
-                  Your email app should have opened with your message prepared. Review it and press Send.
+                  Thanks for reaching out. Your message was delivered successfully.
                 </p>
               </div>
             ) : (
               <form
+                action={FORMSPREE_ENDPOINT}
+                method="POST"
                 onSubmit={handleSubmit}
                 className="flex flex-col gap-5 p-8 rounded-3xl"
                 style={{
@@ -210,6 +245,7 @@ export default function Contact() {
                     </label>
                     <input
                       id={`contact-${field.key}`}
+                      name={field.key}
                       type={field.type}
                       required
                       maxLength={field.maxLength}
@@ -251,6 +287,7 @@ export default function Contact() {
                   </label>
                   <textarea
                     id="contact-message"
+                    name="message"
                     required
                     maxLength={3000}
                     rows={5}
@@ -277,13 +314,31 @@ export default function Contact() {
                   />
                 </div>
 
+                {submitStatus === 'error' && (
+                  <p
+                    role="alert"
+                    style={{
+                      fontFamily: 'Inter, sans-serif',
+                      fontSize: 12,
+                      lineHeight: 1.5,
+                      color: '#fca5a5',
+                    }}
+                  >
+                    {submitError}
+                  </p>
+                )}
+
                 <button
                   type="submit"
+                  disabled={submitStatus === 'sending'}
+                  aria-busy={submitStatus === 'sending'}
                   className="group flex items-center justify-center gap-2 w-full py-3.5 rounded-xl font-medium text-sm transition-all duration-200"
                   style={{
                     background: 'var(--accent)',
                     color: '#fff',
                     fontFamily: 'Inter, sans-serif',
+                    opacity: submitStatus === 'sending' ? 0.7 : 1,
+                    cursor: submitStatus === 'sending' ? 'wait' : 'pointer',
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.boxShadow = '0 0 20px rgba(124,58,237,0.4)'
@@ -294,7 +349,7 @@ export default function Contact() {
                     e.currentTarget.style.transform = 'translateY(0)'
                   }}
                 >
-                  Send message
+                  {submitStatus === 'sending' ? 'Sending...' : 'Send message'}
                   <svg
                     className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                     width="14"

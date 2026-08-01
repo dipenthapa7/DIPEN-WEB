@@ -47,6 +47,38 @@ const CERTIFICATIONS: CertEntry[] = [
     verifyLabel: 'Verify Credential',
     ariaLabel: 'Verify Python Basic credential on HackerRank',
   },
+  {
+    title: 'Ethical Hacker',
+    issuer: 'Cisco',
+    year: '2025',
+    verifyUrl: 'https://www.credly.com/badges/b287a8a0-2c03-421b-ad85-b367963a62ee/public_url',
+    verifyLabel: 'Verify on Credly',
+    ariaLabel: 'Verify Ethical Hacker badge issued by Cisco to Dipen Thapa on Credly',
+  },
+  {
+    title: 'Introduction to Cybersecurity',
+    issuer: 'Cisco',
+    year: '2025',
+    verifyUrl: 'https://www.credly.com/badges/cc36bebb-f903-4703-8b0b-576f02dc13cf/public_url',
+    verifyLabel: 'Verify on Credly',
+    ariaLabel: 'Verify Introduction to Cybersecurity badge issued by Cisco to Dipen Thapa on Credly',
+  },
+  {
+    title: 'Introduction to IoT',
+    issuer: 'Cisco',
+    year: '2025',
+    verifyUrl: 'https://www.credly.com/badges/a8cf046e-2bcd-413d-ac88-a40422455762/public_url',
+    verifyLabel: 'Verify on Credly',
+    ariaLabel: 'Verify Introduction to IoT badge issued by Cisco to Dipen Thapa on Credly',
+  },
+  {
+    title: 'Networking Basics',
+    issuer: 'Cisco',
+    year: '2025',
+    verifyUrl: 'https://www.credly.com/badges/84153280-5f7b-476b-8b34-ba207df3b35c/public_url',
+    verifyLabel: 'Verify on Credly',
+    ariaLabel: 'Verify Networking Basics badge issued by Cisco to Dipen Thapa on Credly',
+  },
 ]
 
 // Supporting / soft-skill credentials — demoted to a compact secondary row.
@@ -335,7 +367,7 @@ function CertCard({ cert, index, inView }: { cert: CertEntry; index: number; inV
 
         <div className="min-w-0">
           <p
-            className="font-display font-semibold truncate"
+            className="font-display font-semibold"
             style={{ fontSize: 14, color: 'var(--text-1)', lineHeight: 1.3 }}
           >
             {cert.title}

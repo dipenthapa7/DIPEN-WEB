@@ -16,7 +16,6 @@ export default function CustomCursor() {
   useEffect(() => {
     // Skip entirely on touch devices — no custom cursor, native cursor stays.
     if (window.matchMedia('(pointer: coarse)').matches) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
     const onMove = (e: MouseEvent) => {
       pos.current = { x: e.clientX, y: e.clientY }
@@ -29,7 +28,7 @@ export default function CustomCursor() {
 
       if (project) {
         setRingClass('is-project')
-        setLabel('VIEW PROJECT')
+        setLabel('VIEW')
         magnet.current = null
       } else if (hover) {
         setRingClass('is-hovering')
@@ -50,7 +49,6 @@ export default function CustomCursor() {
     window.addEventListener('mousemove', onMove)
     window.addEventListener('mouseover', onOver)
 
-    let running = document.visibilityState !== 'hidden'
     const loop = () => {
       const dot = dotRef.current
       const ring = ringRef.current
@@ -79,34 +77,24 @@ export default function CustomCursor() {
         }
       }
 
-      if (running) raf.current = requestAnimationFrame(loop)
+      raf.current = requestAnimationFrame(loop)
     }
 
-    const onVisibilityChange = () => {
-      const shouldRun = document.visibilityState !== 'hidden'
-      if (shouldRun === running) return
-      running = shouldRun
-      if (running) raf.current = requestAnimationFrame(loop)
-      else cancelAnimationFrame(raf.current)
-    }
-
-    if (running) raf.current = requestAnimationFrame(loop)
-    document.addEventListener('visibilitychange', onVisibilityChange)
+    raf.current = requestAnimationFrame(loop)
 
     return () => {
       window.removeEventListener('mousemove', onMove)
       window.removeEventListener('mouseover', onOver)
-      document.removeEventListener('visibilitychange', onVisibilityChange)
       cancelAnimationFrame(raf.current)
     }
   }, [])
 
   return (
     <>
-      <div ref={dotRef} className={`cursor-dot ${ringClass}`} aria-hidden />
-      <div ref={ringRef} className={`cursor-ring ${ringClass}`} aria-hidden />
+      <div ref={dotRef} className={`cursor-dot ${ringClass}`} />
+      <div ref={ringRef} className={`cursor-ring ${ringClass}`} />
       {label && (
-        <div ref={labelRef} className="cursor-label visible" aria-hidden>
+        <div ref={labelRef} className="cursor-label visible">
           {label}
         </div>
       )}
