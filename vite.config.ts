@@ -52,7 +52,6 @@ export default defineConfig(({ mode }) => {
       tailwindcss(),
       figmaSiteConfiguration(siteConfiguration),
       productionSecurityPolicy(),
-      sitesStaticWorker(),
       figmaErrorOverlayReplay(),
       figmaReactRefreshBoundaryFallback(),
       figmaMakeKitPlugin({ storiesGlob: '/src/**/*.stories.{ts,tsx,js,jsx}' }),
@@ -107,51 +106,6 @@ function productionSecurityPolicy(): Plugin {
           },
         ]
       },
-    },
-  }
-}
-
-/**
- * Provides the Cloudflare Worker entry point expected by OpenAI Sites while
- * keeping this existing Vite app fully static. Navigation requests fall back
- * to index.html so direct links continue to load the React application.
- */
-function sitesStaticWorker(): Plugin {
-  const workerSource = `
-const SECURITY_HEADERS = ${JSON.stringify(BROWSER_SECURITY_HEADERS)};
-
-export default {
-  async fetch(request, env) {
-    let response = await env.ASSETS.fetch(request);
-    const acceptsHtml = request.headers.get('Accept')?.includes('text/html');
-
-    if (
-      response.status === 404 &&
-      (request.method === 'GET' || request.method === 'HEAD') &&
-      acceptsHtml
-    ) {
-      const fallbackUrl = new URL('/index.html', request.url);
-      response = await env.ASSETS.fetch(new Request(fallbackUrl, request));
-    }
-
-    const securedResponse = new Response(response.body, response);
-    for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
-      securedResponse.headers.set(name, value);
-    }
-    return securedResponse;
-  },
-};
-`.trimStart()
-
-  return {
-    name: 'sites-static-worker',
-    apply: 'build',
-    generateBundle() {
-      this.emitFile({
-        type: 'asset',
-        fileName: 'server/index.js',
-        source: workerSource,
-      })
     },
   }
 }
