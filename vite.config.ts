@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'node:path'
 
-import siteConfiguration from './.figma/make/site.json' with { type: 'json' }
+import siteConfiguration from './config/site.json' with { type: 'json' }
 
 const JSON_LD_SHA256 = 'sha256-kvGGmeyW85iZBhrFiWPu6bUqU5lsabbB13sxkdTxdA0='
 const CONTENT_SECURITY_POLICY = [
@@ -50,7 +50,7 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       tailwindcss(),
-      figmaSiteConfiguration(siteConfiguration),
+      siteConfigurationPlugin(siteConfiguration),
       productionSecurityPolicy(),
       figmaErrorOverlayReplay(),
       figmaReactRefreshBoundaryFallback(),
@@ -137,8 +137,8 @@ type FigmaSiteConfiguration = {
   }
 }
 
-/** Applies /.figma/make/site.json to the generated document shell. */
-function figmaSiteConfiguration(config: FigmaSiteConfiguration): Plugin {
+/** Applies config/site.json to the generated document shell. */
+function siteConfigurationPlugin(config: FigmaSiteConfiguration): Plugin {
   function sanitizeHtmlValue(value: string | undefined): string {
     return value?.replace(/[^a-zA-Z0-9_-]/g, '') || ''
   }
