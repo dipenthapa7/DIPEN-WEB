@@ -274,13 +274,30 @@ export default function Hero() {
                     </svg>
                   ),
                 },
+                {
+                  label: 'Download CV',
+                  href: '/Dipen-Thapa-CV.pdf',
+                  download: 'Dipen-Thapa-CV.pdf',
+                  icon: (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M7 3.75h6.25L17 7.5v12.75H7V3.75Z"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinejoin="round"
+                      />
+                      <path d="M13 3.75V8h4M12 10.75v5m0 0-2-2m2 2 2-2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  ),
+                },
               ].map((social) => (
                 <a
                   key={social.label}
                   href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={social.label}
+                  target={social.download ? undefined : '_blank'}
+                  rel={social.download ? undefined : 'noopener noreferrer'}
+                  download={social.download}
+                  aria-label={social.download ? 'Download Dipen Thapa CV as PDF' : social.label}
                   className="flex items-center gap-2 text-sm transition-colors duration-200"
                   style={{ color: 'var(--text-3)', fontFamily: 'Inter, sans-serif' }}
                   onMouseEnter={(e) => {

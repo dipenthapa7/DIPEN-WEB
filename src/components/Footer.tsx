@@ -39,12 +39,14 @@ export default function Footer() {
               { label: 'GitHub', href: 'https://github.com/dipenthapa7' },
               { label: 'LinkedIn', href: 'https://www.linkedin.com/in/dipen-thapa-34073432b' },
               { label: 'Email', href: 'mailto:tretime865@gmail.com' },
+              { label: 'CV', href: '/Dipen-Thapa-CV.pdf', download: 'Dipen-Thapa-CV.pdf' },
             ].map((link) => (
               <a
                 key={link.label}
                 href={link.href}
-                target={link.label !== 'Email' ? '_blank' : undefined}
-                rel="noopener noreferrer"
+                target={link.label !== 'Email' && !link.download ? '_blank' : undefined}
+                rel={link.label !== 'Email' && !link.download ? 'noopener noreferrer' : undefined}
+                download={link.download}
                 className="transition-colors duration-200"
                 style={{
                   fontFamily: 'Inter, sans-serif',
